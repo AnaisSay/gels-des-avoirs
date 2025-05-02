@@ -31,3 +31,5 @@ jobs:
             git push
           else
             echo "✅ Aucun changement à enregistrer"
+          fi
+          
