@@ -21,15 +21,16 @@ jobs:
             https://gels-avoirs.dgtresor.gouv.fr/ApiPublic/api/v1/publication/derniere-publication-fichier-json \
             -o data/latest.json
 
-      - name: 📤 Commit & push si le fichier a changé
+      - name: 🔐 Authentifier avec PAT et pousser
+        env:
+          PAT_PUSH_TOKEN: ${{ secrets.PAT_PUSH_TOKEN }}
         run: |
-          git config user.name "GitHub Action"
-          git config user.email "action@github.com"
+          git config user.name "github-actions[bot]"
+          git config user.email "41898282+github-actions[bot]@users.noreply.github.com"
+          git remote set-url origin https://x-access-token:${PAT_PUSH_TOKEN}@github.com/${{ github.repository }}
           git add data/latest.json
           if ! git diff --cached --quiet; then
             git commit -m "🔄 Update gels.json [auto]"
             git push
           else
             echo "✅ Aucun changement à enregistrer"
-          fi
-          
