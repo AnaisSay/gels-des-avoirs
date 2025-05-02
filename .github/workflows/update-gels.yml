@@ -15,7 +15,8 @@ jobs:
 
       - name: Télécharger le fichier JSON depuis la DGT
         run: |
-          curl -sSf https://gels-avoirs.dgtresor.gouv.fr/api/v1/publication/derniere-publication-fichier-json \
+          curl -sSf -H "User-Agent: gels-avoirs-updater (https://github.com/AnaisSay/gels-des-avoirs)" \
+            https://gels-avoirs.dgtresor.gouv.fr/api/v1/publication/derniere-publication-fichier-json \
             -o data/latest.json
 
       - name: Commit et push si modifié
@@ -27,5 +28,5 @@ jobs:
             git commit -m "🔄 Update gels.json [auto]"
             git push
           else
-            echo "Aucun changement détecté"
+            echo "✅ Aucun changement à enregistrer"
           fi
