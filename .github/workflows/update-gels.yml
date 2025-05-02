@@ -2,7 +2,7 @@ name: ⏱️ Mise à jour fichier gels.json
 
 on:
   schedule:
-    - cron: "0 4 * * *"  # Tous les jours à 4h du matin UTC
+    - cron: "0 4 * * *" # Tous les jours à 4h du matin UTC
   workflow_dispatch:
 
 jobs:
@@ -10,16 +10,18 @@ jobs:
     runs-on: ubuntu-latest
 
     steps:
-      - name: Checkout du dépôt
+      - name: 📥 Cloner le dépôt
         uses: actions/checkout@v4
 
-      - name: Télécharger le fichier JSON depuis la DGT
+      - name: 📡 Télécharger le fichier JSON depuis la DGT
         run: |
-          curl -sSf -H "User-Agent: gels-avoirs-updater (https://github.com/AnaisSay/gels-des-avoirs)" \
-            https://gels-avoirs.dgtresor.gouv.fr/api/v1/publication/derniere-publication-fichier-json \
+          mkdir -p data
+          curl -sSf \
+            -H "User-Agent: gels-avoirs-updater (https://github.com/AnaisSay/gels-des-avoirs)" \
+            https://gels-avoirs.dgtresor.gouv.fr/ApiPublic/api/v1/publication/derniere-publication-fichier-json \
             -o data/latest.json
 
-      - name: Commit et push si modifié
+      - name: 📤 Commit & push si le fichier a changé
         run: |
           git config user.name "GitHub Action"
           git config user.email "action@github.com"
@@ -29,4 +31,3 @@ jobs:
             git push
           else
             echo "✅ Aucun changement à enregistrer"
-          fi
